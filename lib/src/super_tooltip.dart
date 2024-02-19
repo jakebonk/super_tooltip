@@ -12,6 +12,7 @@ import 'tooltip_position_delegate.dart';
 class SuperTooltip extends StatefulWidget {
   final Widget content;
   final TooltipDirection popupDirection;
+  final TooltipOffset popupOffset;
   final SuperTooltipController? controller;
   final void Function()? onLongPress;
   final void Function()? onShow;
@@ -60,6 +61,7 @@ class SuperTooltip extends StatefulWidget {
     Key? key,
     required this.content,
     this.popupDirection = TooltipDirection.down,
+    this.popupOffset = TooltipOffset.none,
     this.controller,
     this.onLongPress,
     this.onShow,
@@ -236,9 +238,18 @@ class _SuperTooltipState extends State<SuperTooltip>
       parent: _animationController,
       curve: Curves.fastOutSlowIn,
     );
+    var offsetX = -target.dx + size.width / 2;
+    var offsetY = -target.dy + size.height / 2;
+    switch(widget.popupOffset){
+      case TooltipOffset.center:
+        offsetX = -target.dx;
+        offsetY = -target.dy + size.height / 2;
+        break;
+    }
+
     final offsetToTarget = Offset(
-      -target.dx + size.width / 2,
-      -target.dy + size.height / 2,
+      offsetX,
+      offsetY,
     );
     final backgroundColor =
         widget.backgroundColor ?? Theme.of(context).cardColor;
